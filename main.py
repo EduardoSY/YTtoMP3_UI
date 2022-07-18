@@ -1,12 +1,13 @@
 import tkinter as tk
+from webbrowser import get
 import pytube
 import os
 from moviepy.editor import *
 
-# def yt_mp3_download(url):
-#     yt = pytube.YouTube(url)
-#     print("Título del video....." + yt.title)
-#     print("Duración............." + str(yt.length//60) +":"+str(yt.length%60))
+def yt_mp3_download(url):
+    yt = pytube.YouTube(url)
+    print("Título del video....." + yt.title)
+    print("Duración............." + str(yt.length//60) +":"+str("{:02d}".format(yt.length%60)))
 
 #     archivo_descarga = yt.streams.get_audio_only().download(output_path="MusicaYT")
 #     print("ITAG usado: ")
@@ -26,14 +27,10 @@ tk.Label(ventana, text='URL').pack()
 entry1 = tk.Entry(ventana)
 entry1.pack()
 
-
-def test():
-    print("testee")
-
 download_button = tk.Button(
     ventana,
     text='Download',
-    command = test
+    command = lambda: yt_mp3_download(entry1.get())
 )
 
 download_button.pack()
