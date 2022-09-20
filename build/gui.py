@@ -8,7 +8,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 import tkinter as tkinter
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, font
 from cgitb import text
 from webbrowser import get
 import pytube
@@ -21,12 +21,6 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 DOWNLOAD_PATH = os.getcwd()
 YOUTUBE_URL = ""
 
-#COSAS
-
-
-
-
-#COSAS GENERADAS
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
@@ -62,8 +56,9 @@ def download_process():
 window.geometry("827x578")
 window.title('You2Me')
 window.configure(bg = "#FFFFFF")
-
-
+logo = PhotoImage(
+    file=relative_to_assets("Logo_You2Me.png"))
+window.iconphoto(False, logo)
 canvas = Canvas(
     window,
     bg = "#FFFFFF",
@@ -133,7 +128,8 @@ entry_bg_1 = canvas.create_image(
 entry_1 = Entry(
     bd=0,
     bg="#F9EAEA",
-    highlightthickness=0
+    highlightthickness=0,
+    font=font.Font(family="Arial", size=12)
 )
 entry_1.insert(0, DOWNLOAD_PATH)
 entry_1.place(
@@ -163,12 +159,14 @@ entry_bg_2 = canvas.create_image(
 duracion_cancion = tkinter.StringVar()
 entry_2 = Entry(
     bd=0,
-    bg="#F9EAEA",
+    readonlybackground ="#F9EAEA",
     highlightthickness=0,
     textvariable=duracion_cancion,
-    state="readonly"
+    state="readonly",
+    font=font.Font(family="Arial", size=12),
+    justify='center'
 )
-entry_2.insert(0, 'default text 2')
+#entry_2.insert(0, 'default text 2')
 
 entry_2.place(
     x=699.0,
@@ -199,7 +197,8 @@ entry_3 = Entry(
     bd=0,
     bg="#F9EAEA",
     highlightthickness=0,
-    textvariable=titulo_cancion
+    textvariable=titulo_cancion,
+    font=font.Font(family="Arial", size=12)
 )
 #entry_3.insert(0, 'default text 3')
 entry_3.place(
@@ -262,6 +261,7 @@ entry_4 = Entry(
     bd=0,
     bg="#F9EAEA",
     highlightthickness=0,
+    font=font.Font(family="Arial", size=12)
 )
 #entry_4.insert(0, 'default text 4')
 
