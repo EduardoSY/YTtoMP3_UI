@@ -7,6 +7,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
+import tkinter as tkinter
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog
 from cgitb import text
 from webbrowser import get
@@ -30,6 +31,12 @@ def relative_to_assets(path: str) -> Path:
 
 
 window = Tk()
+
+def yt_mp3_download(url):
+    entry_4.delete(0, len(entry_4.get()))
+    info = pytube.YouTube(url)
+    titulo_cancion.set(str(info.title))
+    duracion_cancion.set(str(str(info.length//60) +":"+str("{:02d}".format(info.length%60))))
 
 def setDownloadPath():
     pathDescarga = filedialog.askdirectory()
@@ -132,6 +139,7 @@ canvas.create_text(
     font=("Inter Regular", 20 * -1)
 )
 
+# DURACION - ENTRY
 entry_image_2 = PhotoImage(
     file=relative_to_assets("entry_2.png"))
 entry_bg_2 = canvas.create_image(
@@ -139,10 +147,12 @@ entry_bg_2 = canvas.create_image(
     346.0,
     image=entry_image_2
 )
+duracion_cancion = tkinter.StringVar()
 entry_2 = Entry(
     bd=0,
     bg="#F9EAEA",
-    highlightthickness=0
+    highlightthickness=0,
+    textvariable=duracion_cancion
 )
 entry_2.insert(0, 'default text 2')
 
@@ -162,6 +172,7 @@ canvas.create_text(
     font=("Inter Regular", 20 * -1)
 )
 
+# TITULO - ENTRY
 entry_image_3 = PhotoImage(
     file=relative_to_assets("entry_3.png"))
 entry_bg_3 = canvas.create_image(
@@ -169,12 +180,14 @@ entry_bg_3 = canvas.create_image(
     346.0,
     image=entry_image_3
 )
+titulo_cancion = tkinter.StringVar()
 entry_3 = Entry(
     bd=0,
     bg="#F9EAEA",
-    highlightthickness=0
+    highlightthickness=0,
+    textvariable=titulo_cancion
 )
-entry_3.insert(0, 'default text 3')
+#entry_3.insert(0, 'default text 3')
 entry_3.place(
     x=424.0,
     y=316.0,
@@ -214,7 +227,7 @@ button_4 = Button(
     image=button_image_4,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_4 clicked"),
+    command=lambda: yt_mp3_download(entry_4.get()),
     relief="flat"
 )
 button_4.place(
@@ -236,7 +249,7 @@ entry_4 = Entry(
     bg="#F9EAEA",
     highlightthickness=0,
 )
-entry_4.insert(0, 'default text 4')
+#entry_4.insert(0, 'default text 4')
 
 entry_4.place(
     x=424.0,
