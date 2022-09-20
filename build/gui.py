@@ -19,6 +19,7 @@ from moviepy.editor import *
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 DOWNLOAD_PATH = os.getcwd()
+YOUTUBE_URL = ""
 
 #COSAS
 
@@ -33,6 +34,8 @@ def relative_to_assets(path: str) -> Path:
 window = Tk()
 
 def yt_mp3_download(url):
+    global YOUTUBE_URL
+    YOUTUBE_URL = str(url)
     entry_4.delete(0, len(entry_4.get()))
     info = pytube.YouTube(url)
     titulo_cancion.set(str(info.title))
@@ -45,6 +48,16 @@ def setDownloadPath():
     print(DOWNLOAD_PATH)
     entry_1.delete(0, len(entry_1.get()))
     entry_1.insert(0, DOWNLOAD_PATH)
+    
+def download_process():
+    print("PROCESO DESCARGA INICIADO")
+    print(YOUTUBE_URL)
+    yt = pytube.YouTube(YOUTUBE_URL)
+    print(DOWNLOAD_PATH)
+    archivo_descarga = yt.streams.get_audio_only().download(output_path=DOWNLOAD_PATH)
+    audioclip = AudioFileClip(archivo_descarga)
+    audioclip.write_audiofile(audioclip.filename.replace('.mp4', '.mp3'), bitrate='128k')
+    os.remove(archivo_descarga)
 
 window.geometry("827x578")
 window.title('You2Me')
@@ -84,7 +97,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=lambda: download_process(),
     relief="flat"
 )
 button_2.place(
@@ -152,7 +165,8 @@ entry_2 = Entry(
     bd=0,
     bg="#F9EAEA",
     highlightthickness=0,
-    textvariable=duracion_cancion
+    textvariable=duracion_cancion,
+    state="readonly"
 )
 entry_2.insert(0, 'default text 2')
 
