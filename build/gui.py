@@ -13,6 +13,8 @@ from webbrowser import get
 import pytube
 import os
 from moviepy.editor import *
+from threading import Thread
+
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -46,6 +48,7 @@ def download_process(select):
     print("PROCESO DESCARGA INICIADO")
     print(YOUTUBE_URL)
     yt = pytube.YouTube(YOUTUBE_URL)
+    
     print(DOWNLOAD_PATH)
     if(select == "audio"):
         archivo_descarga = yt.streams.get_audio_only().download(output_path=DOWNLOAD_PATH)
@@ -56,6 +59,11 @@ def download_process(select):
         video_descarga = yt.streams.get_by_resolution("720p").download(output_path=DOWNLOAD_PATH)
     else:
         print("Error: Opcion de descarga desconocida.")
+
+def download_thread(selection):
+    hilo = Thread(target=download_process, args=[selection])
+    print("Nuevo hilo")
+    hilo.start()
 
 window.geometry("827x578")
 window.title('You2Me')
@@ -80,7 +88,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: download_process("video"),
+    command=lambda: download_thread("video"),
     relief="flat"
 )
 button_1.place(
@@ -96,7 +104,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: download_process("audio"),
+    command=lambda: download_thread("audio"),
     relief="flat"
 )
 button_2.place(
