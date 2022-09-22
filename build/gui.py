@@ -56,14 +56,34 @@ def download_process(select):
         audioclip.write_audiofile(audioclip.filename.replace('.mp4', '.mp3'), bitrate='128k')
         os.remove(archivo_descarga)
     elif(select == "video"):
-        video_descarga = yt.streams.get_by_resolution("720p").download(output_path=DOWNLOAD_PATH)
+        #video_descarga = yt.streams.get_by_resolution("720p").download(output_path=DOWNLOAD_PATH)
+        get_video_download_opt(yt)
     else:
         print("Error: Opcion de descarga desconocida.")
 
+def get_video_download_opt(x: pytube.YouTube):
+    total_streams = x.streams.filter(file_extension='mp4', type="video")
+    options = []
+    for element in total_streams:
+        if(element.itag != 134): #360p30fps ya se puede descargar con el itag 18
+            options.append((element.itag, str(str(element.resolution) + str(element.fps)+"fps")))
+    
+    for x in options:
+        print(x)
+
+
+
 def download_thread(selection):
+    """ Crea un nuevo hilo para realizar la descarga del video o audio
+
+    Args:
+        selection: Indica si la descarga va a ser de un audio o de un video
+    """
     hilo = Thread(target=download_process, args=[selection])
     print("Nuevo hilo")
     hilo.start()
+    # No uso hilo.join() porque estaríamos en el mismo caso que queriamos solucionar.
+    # Si hiciera eso el hilo principal ha de esperar a que este hilo termine.
 
 window.geometry("827x578")
 window.title('You2Me')
@@ -97,6 +117,20 @@ button_1.place(
     width=165.0,
     height=50.0
 )
+
+# button_0 = Button(
+#     image=button_image_1,
+#     borderwidth=0,
+#     highlightthickness=0,
+#     command=lambda: print("pepe"),
+#     relief="flat"
+# )
+# button_0.place(
+#     x=612.0,
+#     y=460.0,
+#     width=165.0,
+#     height=50.0
+# )
 
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
